@@ -3,6 +3,7 @@
 import { ChangeEvent, useState } from "react";
 import Conversation from "./components/conversation";
 import InputText from "./components/form";
+import LanguageSelection from "./components/languageSelection";
 
 export type InputTextProps = {
   message: string,
@@ -15,10 +16,16 @@ export type ConversationProps = {
   messages: string[]
 }
 
+export type LanguageSelectionProps = {
+  selectedLanguage: string
+  handleLanguageSelectionSubmit: (languageCode: string) => void
+}
+
 export default function Home() {
   const [message, setMessage] = useState<string>("")
   const [conversations, setConversations] = useState<string[]>([])
   const [translatedText, setTranslatedText] = useState<string[]>([]);
+  const [selectedLanguage, setSelectedLanguage] = useState<string>("")
 
   const translateText = async (text: string, targetLanguage: string) => {
     const apiKey = process.env.NEXT_PUBLIC_GOOGLE_TRANSLATE_API_KEY;
@@ -46,7 +53,7 @@ export default function Home() {
 
   const handleTranslate = async () => {
     try {
-      const result = await translateText(message, "az"); // Example target language: Russian ("ru")
+      const result = await translateText(message, selectedLanguage);
       setTranslatedText([...translatedText, result]);
     } catch (error) {
       console.error("Translation failed:", error);
@@ -63,9 +70,14 @@ export default function Home() {
     setMessage("")
   }
 
+  function handleLanguageSelectionSubmit(languageCode: string) {
+    setSelectedLanguage(languageCode)
+  }
+
   return (
     <div className="">
       <main className="">
+        <LanguageSelection selectedLanguage={selectedLanguage} handleLanguageSelectionSubmit={handleLanguageSelectionSubmit} />
         <Conversation messages={conversations} />
         <Conversation messages={translatedText} />
         <InputText message={message} handleTextareaChange={handleTextareaChange} handleSubmit={handleSubmit} handleTranslate={handleTranslate} />
