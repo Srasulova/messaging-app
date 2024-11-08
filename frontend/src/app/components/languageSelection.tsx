@@ -9,8 +9,8 @@ export default function LanguageSelection({ selectedLanguage, handleLanguageSele
                 name="languages"
                 id="languages"
                 className="inline-flex w-1/6 justify-center gap-x-1.5 rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50"
-                value={selectedLanguage || "en"} // Controlled component tied to selectedLanguage
-                onChange={(e) => handleLanguageSelectionSubmit(e.target.value)} // Update selected language directly on change
+                value={selectedLanguage}
+                onChange={(e) => handleLanguageSelectionSubmit(e.target.value)}
             >
                 {languageOptions.map((language) => (
                     <option

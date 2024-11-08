@@ -9,7 +9,6 @@ export type InputTextProps = {
   message: string;
   handleTextareaChange: (e: ChangeEvent<HTMLTextAreaElement>) => void;
   handleSubmit: () => void;
-  handleTranslate: () => void;
 };
 
 export type ConversationProps = {
@@ -22,10 +21,22 @@ export type LanguageSelectionProps = {
 };
 
 export default function Home() {
-  const [message, setMessage] = useState<string>("");
-  const [conversations, setConversations] = useState<string[]>([]);
-  const [translatedText, setTranslatedText] = useState<string[]>([]);
-  const [selectedLanguage, setSelectedLanguage] = useState<string>("");
+  const [senderMessage, setSenderMessage] = useState<string>("");  // For sender's message
+  const [recipientMessage, setRecipientMessage] = useState<string>(""); // For recipient's message
+  const [senderConversations, setSenderConversations] = useState<string[]>([]);  // For sender conversation
+  const [recipientConversations, setRecipientConversations] = useState<string[]>([]);  // For recipient conversation
+
+  // Separate language states for sender and recipient
+  const [senderLanguage, setSenderLanguage] = useState<string>("en");  // For sender's language selection
+  const [recipientLanguage, setRecipientLanguage] = useState<string>("en");  // For recipient's language selection
+
+
+  function decodeHtmlEntities(text: string): string {
+    const parser = new DOMParser();
+    const decodedText = parser.parseFromString(`<!doctype html><body>${text}`, "text/html").body.textContent;
+    return decodedText || "";
+  }
+
 
   const translateText = async (text: string, targetLanguage: string) => {
     const apiKey = process.env.NEXT_PUBLIC_GOOGLE_TRANSLATE_API_KEY;
@@ -47,29 +58,65 @@ export default function Home() {
     }
 
     const data = await response.json();
-    return data.data.translations[0].translatedText;
+    const translatedText = data.data.translations[0].translatedText;
+    return decodeHtmlEntities(translatedText);
   };
 
-  const handleTranslate = async () => {
-    try {
-      const result = await translateText(message, selectedLanguage);
-      setTranslatedText([...translatedText, result]);
-    } catch (error) {
-      console.error("Translation failed:", error);
+  function handleSenderMessageChange(e: ChangeEvent<HTMLTextAreaElement>) {
+    setSenderMessage(e.target.value);  // Update sender's message
+  }
+
+  function handleRecipientMessageChange(e: ChangeEvent<HTMLTextAreaElement>) {
+    setRecipientMessage(e.target.value);  // Update recipient's message
+  }
+
+  const handleSenderSubmit = async () => {
+    // Add the sender's message to the sender's conversation
+    setSenderConversations([...senderConversations, senderMessage]);
+
+    // Check if the sender's and recipient's languages are different before translating
+    if (senderLanguage !== recipientLanguage) {
+      try {
+        const translatedMessage = await translateText(senderMessage, recipientLanguage);
+        setRecipientConversations([...recipientConversations, translatedMessage]);
+      } catch (error) {
+        console.error("Translation failed:", error);
+      }
+    } else {
+      // If the languages are the same, add the original message to the recipient's conversation
+      setRecipientConversations([...recipientConversations, senderMessage]);
     }
+
+    setSenderMessage("");  // Clear sender's input after submission
   };
 
-  function handleTextareaChange(e: ChangeEvent<HTMLTextAreaElement>) {
-    setMessage(e.target.value);
+  const handleRecipientSubmit = async () => {
+    // Add the recipient's message to the recipient's conversation
+    setRecipientConversations([...recipientConversations, recipientMessage]);
+
+    // Check if the recipient's and sender's languages are different before translating
+    if (recipientLanguage !== senderLanguage) {
+      try {
+        const translatedMessage = await translateText(recipientMessage, senderLanguage);
+        setSenderConversations([...senderConversations, translatedMessage]);
+      } catch (error) {
+        console.error("Translation failed:", error);
+      }
+    } else {
+      // If the languages are the same, add the original message to the sender's conversation
+      setSenderConversations([...senderConversations, recipientMessage]);
+    }
+
+    setRecipientMessage("");  // Clear recipient's input after submission
+  };
+
+
+  function handleSenderLanguageSelectionSubmit(languageCode: string) {
+    setSenderLanguage(languageCode);  // Update sender's language
   }
 
-  function handleSubmit() {
-    setConversations([...conversations, message]);
-    setMessage("");
-  }
-
-  function handleLanguageSelectionSubmit(languageCode: string) {
-    setSelectedLanguage(languageCode);
+  function handleRecipientLanguageSelectionSubmit(languageCode: string) {
+    setRecipientLanguage(languageCode);  // Update recipient's language
   }
 
   return (
@@ -77,30 +124,30 @@ export default function Home() {
       {/* Sender Conversation Window */}
       <div className="flex flex-col w-1/2 space-y-4 p-4 border border-gray-200 rounded-md shadow-md">
         <LanguageSelection
-          selectedLanguage={selectedLanguage}
-          handleLanguageSelectionSubmit={handleLanguageSelectionSubmit}
+          selectedLanguage={senderLanguage}
+          handleLanguageSelectionSubmit={handleSenderLanguageSelectionSubmit}
         />
-        <Conversation messages={conversations} />
+        <Conversation messages={senderConversations} />
         <InputText
-          message={message}
-          handleTextareaChange={handleTextareaChange}
-          handleSubmit={handleSubmit}
-          handleTranslate={handleTranslate}
+          message={senderMessage}
+          handleTextareaChange={handleSenderMessageChange}
+          handleSubmit={handleSenderSubmit}
+
         />
       </div>
 
       {/* Recipient Conversation Window */}
       <div className="flex flex-col w-1/2 space-y-4 p-4 border border-gray-200 rounded-md shadow-md">
         <LanguageSelection
-          selectedLanguage={selectedLanguage}
-          handleLanguageSelectionSubmit={handleLanguageSelectionSubmit}
+          selectedLanguage={recipientLanguage}
+          handleLanguageSelectionSubmit={handleRecipientLanguageSelectionSubmit}
         />
-        <Conversation messages={translatedText} />
+        <Conversation messages={recipientConversations} />
         <InputText
-          message={message}
-          handleTextareaChange={handleTextareaChange}
-          handleSubmit={handleSubmit}
-          handleTranslate={handleTranslate}
+          message={recipientMessage}
+          handleTextareaChange={handleRecipientMessageChange}
+          handleSubmit={handleRecipientSubmit}
+
         />
       </div>
     </div>

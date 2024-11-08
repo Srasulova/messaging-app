@@ -2,7 +2,7 @@
 
 import { InputTextProps } from "../page";
 
-export default function InputText({ message, handleSubmit, handleTextareaChange, handleTranslate }: InputTextProps) {
+export default function InputText({ message, handleSubmit, handleTextareaChange }: InputTextProps) {
     return (<>
         <div className="w-full">
             <div className="min-w-0">
@@ -10,7 +10,6 @@ export default function InputText({ message, handleSubmit, handleTextareaChange,
                     onSubmit={(e) => {
                         e.preventDefault();
                         handleSubmit()
-                        handleTranslate()
                     }}>
                     <div className="overflow-hidden rounded-lg shadow-sm ring-1 ring-inset ring-gray-300 focus-within:ring-2 focus-within:ring-indigo-600">
                         <textarea rows={3} name="comment" id="comment" className="block w-full resize-none border-0 bg-transparent py-1.5 text-gray-900 placeholder:text-gray-400 focus:ring-0 sm:text-sm/6" placeholder="Add text..."
