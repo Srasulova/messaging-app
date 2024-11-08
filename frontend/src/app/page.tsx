@@ -6,26 +6,26 @@ import InputText from "./components/form";
 import LanguageSelection from "./components/languageSelection";
 
 export type InputTextProps = {
-  message: string,
-  handleTextareaChange: (e: ChangeEvent<HTMLTextAreaElement>) => void,
-  handleSubmit: () => void
-  handleTranslate: () => void
-}
+  message: string;
+  handleTextareaChange: (e: ChangeEvent<HTMLTextAreaElement>) => void;
+  handleSubmit: () => void;
+  handleTranslate: () => void;
+};
 
 export type ConversationProps = {
-  messages: string[]
-}
+  messages: string[];
+};
 
 export type LanguageSelectionProps = {
-  selectedLanguage: string
-  handleLanguageSelectionSubmit: (languageCode: string) => void
-}
+  selectedLanguage: string;
+  handleLanguageSelectionSubmit: (languageCode: string) => void;
+};
 
 export default function Home() {
-  const [message, setMessage] = useState<string>("")
-  const [conversations, setConversations] = useState<string[]>([])
+  const [message, setMessage] = useState<string>("");
+  const [conversations, setConversations] = useState<string[]>([]);
   const [translatedText, setTranslatedText] = useState<string[]>([]);
-  const [selectedLanguage, setSelectedLanguage] = useState<string>("")
+  const [selectedLanguage, setSelectedLanguage] = useState<string>("");
 
   const translateText = async (text: string, targetLanguage: string) => {
     const apiKey = process.env.NEXT_PUBLIC_GOOGLE_TRANSLATE_API_KEY;
@@ -50,7 +50,6 @@ export default function Home() {
     return data.data.translations[0].translatedText;
   };
 
-
   const handleTranslate = async () => {
     try {
       const result = await translateText(message, selectedLanguage);
@@ -60,28 +59,50 @@ export default function Home() {
     }
   };
 
-
   function handleTextareaChange(e: ChangeEvent<HTMLTextAreaElement>) {
     setMessage(e.target.value);
   }
 
   function handleSubmit() {
-    setConversations([...conversations, message])
-    setMessage("")
+    setConversations([...conversations, message]);
+    setMessage("");
   }
 
   function handleLanguageSelectionSubmit(languageCode: string) {
-    setSelectedLanguage(languageCode)
+    setSelectedLanguage(languageCode);
   }
 
   return (
-    <div className="">
-      <main className="">
-        <LanguageSelection selectedLanguage={selectedLanguage} handleLanguageSelectionSubmit={handleLanguageSelectionSubmit} />
+    <div className="flex space-x-8 p-4">
+      {/* Sender Conversation Window */}
+      <div className="flex flex-col w-1/2 space-y-4 p-4 border border-gray-200 rounded-md shadow-md">
+        <LanguageSelection
+          selectedLanguage={selectedLanguage}
+          handleLanguageSelectionSubmit={handleLanguageSelectionSubmit}
+        />
         <Conversation messages={conversations} />
+        <InputText
+          message={message}
+          handleTextareaChange={handleTextareaChange}
+          handleSubmit={handleSubmit}
+          handleTranslate={handleTranslate}
+        />
+      </div>
+
+      {/* Recipient Conversation Window */}
+      <div className="flex flex-col w-1/2 space-y-4 p-4 border border-gray-200 rounded-md shadow-md">
+        <LanguageSelection
+          selectedLanguage={selectedLanguage}
+          handleLanguageSelectionSubmit={handleLanguageSelectionSubmit}
+        />
         <Conversation messages={translatedText} />
-        <InputText message={message} handleTextareaChange={handleTextareaChange} handleSubmit={handleSubmit} handleTranslate={handleTranslate} />
-      </main>
+        <InputText
+          message={message}
+          handleTextareaChange={handleTextareaChange}
+          handleSubmit={handleSubmit}
+          handleTranslate={handleTranslate}
+        />
+      </div>
     </div>
   );
 }

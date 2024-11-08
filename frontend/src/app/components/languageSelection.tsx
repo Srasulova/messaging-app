@@ -3,7 +3,7 @@ import { languageOptions } from "../data/languageOptions";
 
 export default function LanguageSelection({ selectedLanguage, handleLanguageSelectionSubmit }: LanguageSelectionProps) {
     return (
-        <div className="my-10">
+        <div className="my-4">
             <label htmlFor="languages" className="block text-sm font-medium text-gray-700">Select Language</label>
             <select
                 name="languages"
