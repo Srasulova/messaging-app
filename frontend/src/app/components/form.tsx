@@ -1,6 +1,6 @@
 'use client'
 
-import { InputTextProps } from "../page";
+import { InputTextProps } from "../utils/types";
 
 export default function InputText({ message, handleSubmit, handleTextareaChange }: InputTextProps) {
     return (<>

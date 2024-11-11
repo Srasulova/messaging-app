@@ -1,24 +1,9 @@
 'use client'
 
-import { ChangeEvent, useState } from "react";
+import { useState } from "react";
 import { translateText } from "./utils/translate";
 import ChatWindow from "./components/chatWindow";
 
-
-export type InputTextProps = {
-  message: string;
-  handleTextareaChange: (e: ChangeEvent<HTMLTextAreaElement>) => void;
-  handleSubmit: () => void;
-};
-
-export type ConversationProps = {
-  messages: string[];
-};
-
-export type LanguageSelectionProps = {
-  selectedLanguage: string;
-  handleLanguageSelectionSubmit: (languageCode: string) => void;
-};
 
 export default function Home() {
   const [senderLanguage, setSenderLanguage] = useState<string>("en");

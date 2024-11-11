@@ -1,4 +1,4 @@
-import { ConversationProps } from "../page"
+import { ConversationProps } from "../utils/types"
 
 export default function Conversation({ messages }: ConversationProps) {
     return (

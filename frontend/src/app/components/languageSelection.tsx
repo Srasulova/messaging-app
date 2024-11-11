@@ -1,4 +1,4 @@
-import { LanguageSelectionProps } from "../page";
+import { LanguageSelectionProps } from "../utils/types";
 import { languageOptions } from "../data/languageOptions";
 
 export default function LanguageSelection({ selectedLanguage, handleLanguageSelectionSubmit }: LanguageSelectionProps) {
@@ -8,7 +8,7 @@ export default function LanguageSelection({ selectedLanguage, handleLanguageSele
             <select
                 name="languages"
                 id="languages"
-                className="inline-flex w-1/6 justify-center gap-x-1.5 rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50"
+                className="inline-flex w-1/2 justify-center gap-x-1.5 rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50"
                 value={selectedLanguage}
                 onChange={(e) => handleLanguageSelectionSubmit(e.target.value)}
             >

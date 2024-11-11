@@ -2,19 +2,8 @@ import { ChangeEvent } from "react";
 import LanguageSelection from "./languageSelection";
 import Conversation from "./conversation";
 import InputText from "./form";
+import { ChatWindowProps } from "../utils/types";
 
-type ChatWindowProps = {
-    type: "sender" | "recipient";
-    language: string;
-    setLanguage: (language: string) => void;
-    message: string;
-    setMessage: (message: string) => void;
-    conversations: string[];
-    setConversations: React.Dispatch<React.SetStateAction<string[]>>;
-    translateText: (text: string, targetLanguage: string) => Promise<string>;
-    recipientLanguage: string;
-    onSendMessage: (text: string) => void;
-};
 
 export default function ChatWindow({
     type,
