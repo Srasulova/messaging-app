@@ -1,9 +1,9 @@
 'use client'
 
 import { ChangeEvent, useState } from "react";
-import Conversation from "./components/conversation";
-import InputText from "./components/form";
-import LanguageSelection from "./components/languageSelection";
+import { translateText } from "./utils/translate";
+import ChatWindow from "./components/chatWindow";
+
 
 export type InputTextProps = {
   message: string;
@@ -21,135 +21,51 @@ export type LanguageSelectionProps = {
 };
 
 export default function Home() {
-  const [senderMessage, setSenderMessage] = useState<string>("");  // For sender's message
-  const [recipientMessage, setRecipientMessage] = useState<string>(""); // For recipient's message
-  const [senderConversations, setSenderConversations] = useState<string[]>([]);  // For sender conversation
-  const [recipientConversations, setRecipientConversations] = useState<string[]>([]);  // For recipient conversation
+  const [senderLanguage, setSenderLanguage] = useState<string>("en");
+  const [senderMessage, setSenderMessage] = useState<string>("");
+  const [senderConversations, setSenderConversations] = useState<string[]>([]);
 
-  // Separate language states for sender and recipient
-  const [senderLanguage, setSenderLanguage] = useState<string>("en");  // For sender's language selection
-  const [recipientLanguage, setRecipientLanguage] = useState<string>("en");  // For recipient's language selection
+  const [recipientLanguage, setRecipientLanguage] = useState<string>("en");
+  const [recipientMessage, setRecipientMessage] = useState<string>("");
+  const [recipientConversations, setRecipientConversations] = useState<string[]>([]);
 
-
-  function decodeHtmlEntities(text: string): string {
-    const parser = new DOMParser();
-    const decodedText = parser.parseFromString(`<!doctype html><body>${text}`, "text/html").body.textContent;
-    return decodedText || "";
-  }
-
-
-  const translateText = async (text: string, targetLanguage: string) => {
-    const apiKey = process.env.NEXT_PUBLIC_GOOGLE_TRANSLATE_API_KEY;
-    const url = process.env.NEXT_PUBLIC_GOOGLE_TRANSLATE_URL;
-
-    const response = await fetch(`${url}?key=${apiKey}`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        q: text,
-        target: targetLanguage,
-      }),
-    });
-
-    if (!response.ok) {
-      throw new Error("Translation API request failed");
-    }
-
-    const data = await response.json();
-    const translatedText = data.data.translations[0].translatedText;
-    return decodeHtmlEntities(translatedText);
-  };
-
-  function handleSenderMessageChange(e: ChangeEvent<HTMLTextAreaElement>) {
-    setSenderMessage(e.target.value);  // Update sender's message
-  }
-
-  function handleRecipientMessageChange(e: ChangeEvent<HTMLTextAreaElement>) {
-    setRecipientMessage(e.target.value);  // Update recipient's message
-  }
-
-  const handleSenderSubmit = async () => {
-    // Add the sender's message to the sender's conversation
-    setSenderConversations([...senderConversations, senderMessage]);
-
-    // Check if the sender's and recipient's languages are different before translating
-    if (senderLanguage !== recipientLanguage) {
-      try {
-        const translatedMessage = await translateText(senderMessage, recipientLanguage);
-        setRecipientConversations([...recipientConversations, translatedMessage]);
-      } catch (error) {
-        console.error("Translation failed:", error);
-      }
+  // Handle sending message from sender to recipient
+  const handleSendMessage = (message: string, type: "sender" | "recipient") => {
+    if (type === "sender") {
+      // Add translated message to recipient's chat window
+      setRecipientConversations((prevMessages) => [...prevMessages, message]);
     } else {
-      // If the languages are the same, add the original message to the recipient's conversation
-      setRecipientConversations([...recipientConversations, senderMessage]);
+      // Add response or message in recipient's chat window back to sender if needed
+      setSenderConversations((prevMessages) => [...prevMessages, message]);
     }
-
-    setSenderMessage("");  // Clear sender's input after submission
   };
-
-  const handleRecipientSubmit = async () => {
-    // Add the recipient's message to the recipient's conversation
-    setRecipientConversations([...recipientConversations, recipientMessage]);
-
-    // Check if the recipient's and sender's languages are different before translating
-    if (recipientLanguage !== senderLanguage) {
-      try {
-        const translatedMessage = await translateText(recipientMessage, senderLanguage);
-        setSenderConversations([...senderConversations, translatedMessage]);
-      } catch (error) {
-        console.error("Translation failed:", error);
-      }
-    } else {
-      // If the languages are the same, add the original message to the sender's conversation
-      setSenderConversations([...senderConversations, recipientMessage]);
-    }
-
-    setRecipientMessage("");  // Clear recipient's input after submission
-  };
-
-
-  function handleSenderLanguageSelectionSubmit(languageCode: string) {
-    setSenderLanguage(languageCode);  // Update sender's language
-  }
-
-  function handleRecipientLanguageSelectionSubmit(languageCode: string) {
-    setRecipientLanguage(languageCode);  // Update recipient's language
-  }
 
   return (
     <div className="flex space-x-8 p-4">
-      {/* Sender Conversation Window */}
-      <div className="flex flex-col w-1/2 space-y-4 p-4 border border-gray-200 rounded-md shadow-md">
-        <LanguageSelection
-          selectedLanguage={senderLanguage}
-          handleLanguageSelectionSubmit={handleSenderLanguageSelectionSubmit}
-        />
-        <Conversation messages={senderConversations} />
-        <InputText
-          message={senderMessage}
-          handleTextareaChange={handleSenderMessageChange}
-          handleSubmit={handleSenderSubmit}
-
-        />
-      </div>
-
-      {/* Recipient Conversation Window */}
-      <div className="flex flex-col w-1/2 space-y-4 p-4 border border-gray-200 rounded-md shadow-md">
-        <LanguageSelection
-          selectedLanguage={recipientLanguage}
-          handleLanguageSelectionSubmit={handleRecipientLanguageSelectionSubmit}
-        />
-        <Conversation messages={recipientConversations} />
-        <InputText
-          message={recipientMessage}
-          handleTextareaChange={handleRecipientMessageChange}
-          handleSubmit={handleRecipientSubmit}
-
-        />
-      </div>
+      <ChatWindow
+        type="sender"
+        language={senderLanguage}
+        setLanguage={setSenderLanguage}
+        message={senderMessage}
+        setMessage={setSenderMessage}
+        conversations={senderConversations}
+        setConversations={setSenderConversations}
+        translateText={translateText}
+        recipientLanguage={recipientLanguage}
+        onSendMessage={(message) => handleSendMessage(message, "sender")}
+      />
+      <ChatWindow
+        type="recipient"
+        language={recipientLanguage}
+        setLanguage={setRecipientLanguage}
+        message={recipientMessage}
+        setMessage={setRecipientMessage}
+        conversations={recipientConversations}
+        setConversations={setRecipientConversations}
+        translateText={translateText}
+        recipientLanguage={senderLanguage}
+        onSendMessage={(message) => handleSendMessage(message, "recipient")}
+      />
     </div>
   );
 }
