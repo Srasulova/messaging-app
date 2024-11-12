@@ -4,7 +4,6 @@ import Conversation from "./conversation";
 import InputText from "./form";
 import { ChatWindowProps } from "../utils/types";
 
-
 export default function ChatWindow({
     type,
     language,
@@ -25,21 +24,28 @@ export default function ChatWindow({
     };
 
     return (
-        <div className="chat-window flex flex-col w-1/2 space-y-4 p-4 border border-gray-200 rounded-md shadow-md">
-            <h2 className="text-lg font-semibold">{type === "sender" ? "Sender" : "Recipient"} Chat</h2>
+        <div className="relative flex flex-col w-1/2 space-y-4 p-4 border border-gray-200 rounded-md shadow-md">
+            {/* Patterned Background */}
+            <div className="absolute inset-0 pattern-boxes pattern-blue-200 pattern-bg-white 
+  pattern-size-2 pattern-opacity-40 z-0 rounded-md"></div>
 
-            <LanguageSelection
-                selectedLanguage={language}
-                handleLanguageSelectionSubmit={handleLanguageChange}
-            />
+            {/* Chat Window Content */}
+            <div className="relative z-10">
+                <h2 className="text-lg font-semibold">{type === "sender" ? "Sender" : "Recipient"} Chat</h2>
 
-            <Conversation messages={conversations} />
+                <LanguageSelection
+                    selectedLanguage={language}
+                    handleLanguageSelectionSubmit={handleLanguageChange}
+                />
 
-            <InputText
-                message={message}
-                handleTextareaChange={handleMessageChange}
-                handleSubmit={handleSubmit}
-            />
+                <Conversation messages={conversations} type={type} />
+
+                <InputText
+                    message={message}
+                    handleTextareaChange={handleMessageChange}
+                    handleSubmit={handleSubmit}
+                />
+            </div>
         </div>
     );
 }

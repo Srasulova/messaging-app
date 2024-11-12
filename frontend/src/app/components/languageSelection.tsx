@@ -4,7 +4,7 @@ import { languageOptions } from "../data/languageOptions";
 export default function LanguageSelection({ selectedLanguage, handleLanguageSelectionSubmit }: LanguageSelectionProps) {
     return (
         <div className="my-4">
-            <label htmlFor="languages" className="block text-sm font-medium text-gray-700">Select Language</label>
+            <label htmlFor="languages" className="block text-sm font-medium text-gray-700 mb-2">Select Language</label>
             <select
                 name="languages"
                 id="languages"

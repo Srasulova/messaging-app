@@ -2,14 +2,19 @@ import { ChangeEvent } from "react";
 
 export type UserType = "sender" | "recipient";
 
+export type Message = {
+  text: string;
+  sender: UserType;
+};
+
 export type ChatWindowProps = {
   type: UserType;
   language: string;
   setLanguage: (language: string) => void;
   message: string;
   setMessage: (message: string) => void;
-  conversations: string[];
-  onSubmitMessage: (message: string) => void; // Updated from onSendMessage
+  conversations: Message[];
+  onSubmitMessage: (message: string) => void;
 };
 
 export type InputTextProps = {
@@ -19,7 +24,8 @@ export type InputTextProps = {
 };
 
 export type ConversationProps = {
-  messages: string[];
+  messages: Message[];
+  type: UserType;
 };
 
 export type LanguageSelectionProps = {

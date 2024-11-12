@@ -3,30 +3,38 @@
 import { useState } from "react";
 import { translateText } from "./utils/translate";
 import ChatWindow from "./components/chatWindow";
-import { UserType } from "./utils/types";
-
+import { UserType, Message } from "./utils/types"; // Assuming Message type is imported from types.ts
 
 export default function Home() {
   const [senderLanguage, setSenderLanguage] = useState<string>("en");
   const [senderMessage, setSenderMessage] = useState<string>("");
-  const [senderConversations, setSenderConversations] = useState<string[]>([]);
+  const [senderConversations, setSenderConversations] = useState<Message[]>([]); // Change type to Message[]
 
   const [recipientLanguage, setRecipientLanguage] = useState<string>("en");
   const [recipientMessage, setRecipientMessage] = useState<string>("");
-  const [recipientConversations, setRecipientConversations] = useState<string[]>([]);
+  const [recipientConversations, setRecipientConversations] = useState<Message[]>([]); // Change type to Message[]
 
   // Handle message submission, translation, and conversation updates
   const handleSubmitMessage = async (message: string, type: UserType) => {
     const senderLang = type === "sender" ? senderLanguage : recipientLanguage;
     const recipientLang = type === "sender" ? recipientLanguage : senderLanguage;
-    const setRecipientConvo = type === "sender" ? setRecipientConversations : setSenderConversations;
-    const setSenderConvo = type === "sender" ? setSenderConversations : setRecipientConversations;
 
-    setSenderConvo((prev) => [...prev, message]); // Add original message to sender's conversation
+    // Construct the sender's message object
+    const senderMessageObj: Message = { text: message, sender: type };
+    if (type === "sender") {
+      setSenderConversations((prev) => [...prev, senderMessageObj]);
+    } else {
+      setRecipientConversations((prev) => [...prev, senderMessageObj]);
+    }
 
     // Translate message if needed and add to recipient's conversation
     const finalMessage = senderLang !== recipientLang ? await translateText(message, recipientLang) : message;
-    setRecipientConvo((prev) => [...prev, finalMessage]);
+    const recipientMessageObj: Message = { text: finalMessage, sender: type };
+    if (type === "sender") {
+      setRecipientConversations((prev) => [...prev, recipientMessageObj]);
+    } else {
+      setSenderConversations((prev) => [...prev, recipientMessageObj]);
+    }
   };
 
   return (
