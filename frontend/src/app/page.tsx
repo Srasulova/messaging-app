@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { translateText } from "./utils/translate";
 import ChatWindow from "./components/chatWindow";
+import { UserType } from "./utils/types";
 
 
 export default function Home() {
@@ -14,15 +15,18 @@ export default function Home() {
   const [recipientMessage, setRecipientMessage] = useState<string>("");
   const [recipientConversations, setRecipientConversations] = useState<string[]>([]);
 
-  // Handle sending message from sender to recipient
-  const handleSendMessage = (message: string, type: "sender" | "recipient") => {
-    if (type === "sender") {
-      // Add translated message to recipient's chat window
-      setRecipientConversations((prevMessages) => [...prevMessages, message]);
-    } else {
-      // Add response or message in recipient's chat window back to sender if needed
-      setSenderConversations((prevMessages) => [...prevMessages, message]);
-    }
+  // Handle message submission, translation, and conversation updates
+  const handleSubmitMessage = async (message: string, type: UserType) => {
+    const senderLang = type === "sender" ? senderLanguage : recipientLanguage;
+    const recipientLang = type === "sender" ? recipientLanguage : senderLanguage;
+    const setRecipientConvo = type === "sender" ? setRecipientConversations : setSenderConversations;
+    const setSenderConvo = type === "sender" ? setSenderConversations : setRecipientConversations;
+
+    setSenderConvo((prev) => [...prev, message]); // Add original message to sender's conversation
+
+    // Translate message if needed and add to recipient's conversation
+    const finalMessage = senderLang !== recipientLang ? await translateText(message, recipientLang) : message;
+    setRecipientConvo((prev) => [...prev, finalMessage]);
   };
 
   return (
@@ -34,10 +38,7 @@ export default function Home() {
         message={senderMessage}
         setMessage={setSenderMessage}
         conversations={senderConversations}
-        setConversations={setSenderConversations}
-        translateText={translateText}
-        recipientLanguage={recipientLanguage}
-        onSendMessage={(message) => handleSendMessage(message, "sender")}
+        onSubmitMessage={(message) => handleSubmitMessage(message, "sender")}
       />
       <ChatWindow
         type="recipient"
@@ -46,10 +47,7 @@ export default function Home() {
         message={recipientMessage}
         setMessage={setRecipientMessage}
         conversations={recipientConversations}
-        setConversations={setRecipientConversations}
-        translateText={translateText}
-        recipientLanguage={senderLanguage}
-        onSendMessage={(message) => handleSendMessage(message, "recipient")}
+        onSubmitMessage={(message) => handleSubmitMessage(message, "recipient")}
       />
     </div>
   );

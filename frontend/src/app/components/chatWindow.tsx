@@ -12,32 +12,15 @@ export default function ChatWindow({
     message,
     setMessage,
     conversations,
-    setConversations,
-    translateText,
-    recipientLanguage,
-    onSendMessage,
+    onSubmitMessage,
 }: ChatWindowProps) {
 
     const handleLanguageChange = (newLanguage: string) => setLanguage(newLanguage);
 
     const handleMessageChange = (e: ChangeEvent<HTMLTextAreaElement>) => setMessage(e.target.value);
 
-    const handleSubmit = async () => {
-        // Add the original message to the current conversation
-        setConversations((prevMessages) => [...prevMessages, message]);
-
-        // Check if translation is needed based on sender/recipient languages
-        if (language !== recipientLanguage) {
-            try {
-                const translatedMessage = await translateText(message, recipientLanguage);
-                onSendMessage(translatedMessage);  // Send translated message to recipient
-            } catch (error) {
-                console.error("Translation failed:", error);
-            }
-        } else {
-            onSendMessage(message);  // Send original message if languages are the same
-        }
-
+    const handleSubmit = () => {
+        onSubmitMessage(message); // Pass message up to parent for processing
         setMessage("");  // Clear input message
     };
 

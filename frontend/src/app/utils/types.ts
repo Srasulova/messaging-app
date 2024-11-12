@@ -1,18 +1,15 @@
-// src/types.ts
-
 import { ChangeEvent } from "react";
 
+export type UserType = "sender" | "recipient";
+
 export type ChatWindowProps = {
-  type: "sender" | "recipient";
+  type: UserType;
   language: string;
   setLanguage: (language: string) => void;
   message: string;
   setMessage: (message: string) => void;
   conversations: string[];
-  setConversations: React.Dispatch<React.SetStateAction<string[]>>;
-  translateText: (text: string, targetLanguage: string) => Promise<string>;
-  recipientLanguage: string;
-  onSendMessage: (text: string) => void;
+  onSubmitMessage: (message: string) => void; // Updated from onSendMessage
 };
 
 export type InputTextProps = {
