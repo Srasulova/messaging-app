@@ -2,7 +2,7 @@ import { ConversationProps } from "../utils/types";
 
 export default function Conversation({ messages, type }: ConversationProps) {
     return (
-        <div className="w-full h-96 mb-10 p-4 overflow-auto space-y-2 flex flex-col">
+        <div className="w-full  mb-10 p-4 overflow-auto space-y-2 flex flex-col flex-grow">
             {messages.map((msg, index) => (
                 <div
                     key={index}

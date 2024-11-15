@@ -8,7 +8,7 @@ export default function LanguageSelection({ selectedLanguage, handleLanguageSele
             <select
                 name="languages"
                 id="languages"
-                className="inline-flex w-1/2 justify-center gap-x-1.5 rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-cyan-300 hover:bg-gray-50"
+                className="inline-flex w-1/2 justify-center gap-x-1.5 rounded-full bg-white px-3 py-2 text-sm font-semibold text-gray-900 border-cyan-300 focus:border-cyan-600 focus:ring-0 hover:bg-gray-50"
                 value={selectedLanguage}
                 onChange={(e) => handleLanguageSelectionSubmit(e.target.value)}
             >

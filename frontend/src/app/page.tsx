@@ -4,6 +4,7 @@ import { useState } from "react";
 import { translateText } from "./utils/translate";
 import ChatWindow from "./components/chatWindow";
 import { UserType, Message } from "./utils/types"; // Assuming Message type is imported from types.ts
+import Contacts from "./components/contacts";
 
 export default function Home() {
   const [senderLanguage, setSenderLanguage] = useState<string>("en");
@@ -37,26 +38,35 @@ export default function Home() {
     }
   };
 
-  return (
-    <div className="flex space-x-8 p-4">
-      <ChatWindow
-        type="sender"
-        language={senderLanguage}
-        setLanguage={setSenderLanguage}
-        message={senderMessage}
-        setMessage={setSenderMessage}
-        conversations={senderConversations}
-        onSubmitMessage={(message) => handleSubmitMessage(message, "sender")}
-      />
-      <ChatWindow
-        type="recipient"
-        language={recipientLanguage}
-        setLanguage={setRecipientLanguage}
-        message={recipientMessage}
-        setMessage={setRecipientMessage}
-        conversations={recipientConversations}
-        onSubmitMessage={(message) => handleSubmitMessage(message, "recipient")}
-      />
+  return (<>
+    <div className="flex h-svh">
+      <div className="w-1/5 p-4 min-w-fit">
+        <Contacts />
+      </div>
+
+      <div className="w-full md:flex-row md:space-x-8 md:space-y-0 p-4 flex flex-col space-y-8">
+        <ChatWindow
+          type="sender"
+          language={senderLanguage}
+          setLanguage={setSenderLanguage}
+          message={senderMessage}
+          setMessage={setSenderMessage}
+          conversations={senderConversations}
+          onSubmitMessage={(message) => handleSubmitMessage(message, "sender")}
+        />
+        <ChatWindow
+          type="recipient"
+          language={recipientLanguage}
+          setLanguage={setRecipientLanguage}
+          message={recipientMessage}
+          setMessage={setRecipientMessage}
+          conversations={recipientConversations}
+          onSubmitMessage={(message) => handleSubmitMessage(message, "recipient")}
+        />
+      </div>
     </div>
+
+  </>
+
   );
 }
