@@ -18,8 +18,26 @@ export default function Contacts() {
     return (
         <div className="bg-white h-full overflow-auto p-4 border border-gray-200 rounded-md shadow-md">
             <div className="mx-auto max-w-7xl px-4">
-                <div className="mx-auto max-w-2xl lg:mx-0">
+                <div className="mx-auto max-w-2xl lg:mx-0 flex justify-between items-center">
                     <h2 className="text-pretty text-xl font-semibold tracking-tight text-gray-900">Contacts</h2>
+                    <button className="bg-cyan-300 rounded-full  active:translate-y-1">
+                        <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            fill="white"
+                            viewBox="0 0 24 24"
+                            strokeWidth={2}
+                            stroke="white"
+                            className="size-10 p-1.5 transition transform duration-150 active:scale-125  "
+                        >
+                            <path
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                                d="M18 7.5v3m0 0v3m0-3h3m-3 0h-3m-2.25-4.125a3.375 3.375 0 1 1-6.75 0 3.375 3.375 0 0 1 6.75 0ZM3 19.235v-.11a6.375 6.375 0 0 1 12.75 0v.109A12.318 12.318 0 0 1 9.374 21c-2.331 0-4.512-.645-6.374-1.766Z"
+                            />
+                        </svg>
+                    </button>
+
+
                 </div>
 
                 {/* Search Input */}
