@@ -7,6 +7,12 @@ export type Message = {
   sender: UserType;
 };
 
+export type Contact = {
+  id: number;
+  name: string;
+  image: string | null;
+};
+
 export type ChatWindowProps = {
   type: UserType;
   language: string;
@@ -31,4 +37,8 @@ export type ConversationProps = {
 export type LanguageSelectionProps = {
   selectedLanguage: string;
   handleLanguageSelectionSubmit: (languageCode: string) => void;
+};
+
+export type NewContactFormProps = {
+  onAddContact: (contact: { name: string; image: string | null }) => void;
 };
