@@ -3,17 +3,17 @@
 import { useState } from "react";
 import { translateText } from "./utils/translate";
 import ChatWindow from "./components/chatWindow";
-import { UserType, Message } from "./utils/types"; // Assuming Message type is imported from types.ts
+import { UserType, Message } from "./utils/types";
 import Contacts from "./components/contacts";
 
 export default function Home() {
   const [senderLanguage, setSenderLanguage] = useState<string>("en");
   const [senderMessage, setSenderMessage] = useState<string>("");
-  const [senderConversations, setSenderConversations] = useState<Message[]>([]); // Change type to Message[]
+  const [senderConversations, setSenderConversations] = useState<Message[]>([]);
 
   const [recipientLanguage, setRecipientLanguage] = useState<string>("en");
   const [recipientMessage, setRecipientMessage] = useState<string>("");
-  const [recipientConversations, setRecipientConversations] = useState<Message[]>([]); // Change type to Message[]
+  const [recipientConversations, setRecipientConversations] = useState<Message[]>([]);
 
   // Handle message submission, translation, and conversation updates
   const handleSubmitMessage = async (message: string, type: UserType) => {
@@ -40,7 +40,7 @@ export default function Home() {
 
   return (<>
     <div className="flex h-svh">
-      <div className="w-1/5 p-4 min-w-fit">
+      <div className="w-1/5 max-w-xs p-4 min-w-fit">
         <Contacts />
       </div>
 
