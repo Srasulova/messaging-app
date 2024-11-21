@@ -54,7 +54,7 @@ export default function Contacts() {
                         ></div>
 
                         {/* Slide-in Form */}
-                        <div className="fixed inset-y-0 left-0 max-w-xs w-full bg-white shadow-xl transform transition-transform">
+                        <div className="fixed inset-y-0 left-0 max-w-xs w-full bg-white shadow-xl rounded-md transform transition-transform">
                             <NewContactForm
                                 onAddContact={addContact}
                                 onClose={() => setShowForm(false)}
@@ -79,13 +79,31 @@ export default function Contacts() {
                         )
                         .map(contact => (
                             <li key={contact.id} className="flex items-center space-x-2">
-                                <Image
-                                    className="rounded-full"
-                                    src={contact.image}
-                                    alt={contact.name}
-                                    width={50}
-                                    height={50}
-                                />
+                                {contact.image ? (
+                                    <Image
+                                        className="rounded-full"
+                                        src={contact.image}
+                                        alt={contact.name}
+                                        width={50}
+                                        height={50}
+                                    />
+                                ) : (
+                                    <svg
+                                        xmlns="http://www.w3.org/2000/svg"
+                                        fill="none"
+                                        viewBox="0 0 24 24"
+                                        strokeWidth="1"
+                                        stroke="currentColor"
+                                        className="w-16 h-16 text-gray-400 -ml-2"
+                                    >
+                                        <path
+                                            strokeLinecap="round"
+                                            strokeLinejoin="round"
+                                            d="M17.982 18.725A7.488 7.488 0 0 0 12 15.75a7.488 7.488 0 0 0-5.982 2.975m11.963 0a9 9 0 1 0-11.963 0m11.963 0A8.966 8.966 0 0 1 12 21a8.966 8.966 0 0 1-5.982-2.275M15 9.75a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z"
+                                        />
+                                    </svg>
+
+                                )}
                                 <h3 className="text-base font-medium text-gray-900">{contact.name}</h3>
                             </li>
                         ))}
@@ -93,6 +111,7 @@ export default function Contacts() {
                         <p className="text-gray-500">No contacts found.</p>
                     )}
                 </ul>
+
             </div>
         </div>
     );

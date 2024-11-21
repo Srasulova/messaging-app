@@ -64,7 +64,7 @@ export default function NewContactForm({ onAddContact, onClose }: NewContactForm
             <div className="flex items-center justify-center space-x-2 mb-1">
 
 
-                {isValidImage ? (
+                {isValidImage && imageUrl ? (
                     <Image src={imageUrl} alt="Contact preview" className="w-16 h-16 rounded-full" width={150} height={150} />
                 ) : (
                     <svg
