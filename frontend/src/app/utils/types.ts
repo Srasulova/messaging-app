@@ -41,4 +41,5 @@ export type LanguageSelectionProps = {
 
 export type NewContactFormProps = {
   onAddContact: (contact: { name: string; image: string | null }) => void;
+  onClose: () => void;
 };

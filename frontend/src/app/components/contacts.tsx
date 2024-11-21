@@ -11,13 +11,8 @@ const contactsData: Contact[] = [
 
 export default function Contacts() {
     const [searchQuery, setSearchQuery] = useState("");
-    const [contacts, setContacts] = useState([...contactsData]); // initialize with default contacts
+    const [contacts, setContacts] = useState([...contactsData]);
     const [showForm, setShowForm] = useState(false);
-
-    // Filter contacts based on search query
-    const filteredContacts = contactsData.filter(contact =>
-        contact.name.toLowerCase().includes(searchQuery.toLowerCase())
-    );
 
     const addContact = (newContact: Omit<Contact, 'id'>) => {
         setContacts([...contacts, { id: contacts.length + 1, ...newContact }]);
@@ -27,16 +22,19 @@ export default function Contacts() {
     return (
         <div className="bg-white h-full overflow-auto p-4 border border-gray-200 rounded-md shadow-md">
             <div className="mx-auto max-w-7xl px-4">
-                <div className="mx-auto max-w-2xl lg:mx-0 flex justify-between items-center">
-                    <h2 className="text-pretty text-xl font-semibold tracking-tight text-gray-900">Contacts</h2>
-                    <button className="bg-cyan-300 rounded-full active:translate-y-1" onClick={() => setShowForm(true)}>
+                <div className="flex justify-between items-center">
+                    <h2 className="text-xl font-semibold text-gray-900">Contacts</h2>
+                    <button
+                        className="bg-cyan-300 rounded-full active:translate-y-1"
+                        onClick={() => setShowForm(true)}
+                    >
                         <svg
                             xmlns="http://www.w3.org/2000/svg"
                             fill="white"
                             viewBox="0 0 24 24"
                             strokeWidth={2}
                             stroke="white"
-                            className="size-10 p-1.5 transition transform duration-150 active:scale-125"
+                            className="w-6 h-6 p-1"
                         >
                             <path
                                 strokeLinecap="round"
@@ -45,9 +43,25 @@ export default function Contacts() {
                             />
                         </svg>
                     </button>
-
-                    {showForm && <NewContactForm onAddContact={addContact} />}
                 </div>
+
+                {showForm && (
+                    <div className="fixed inset-0 z-20">
+                        {/* Backdrop */}
+                        <div
+                            className="fixed inset-0 bg-gray-500 bg-opacity-50 transition-opacity"
+                            onClick={() => setShowForm(false)}
+                        ></div>
+
+                        {/* Slide-in Form */}
+                        <div className="fixed inset-y-0 left-0 max-w-xs w-full bg-white shadow-xl transform transition-transform">
+                            <NewContactForm
+                                onAddContact={addContact}
+                                onClose={() => setShowForm(false)}
+                            />
+                        </div>
+                    </div>
+                )}
 
                 {/* Search Input */}
                 <input
@@ -59,30 +73,23 @@ export default function Contacts() {
                 />
 
                 <ul role="list" className="mt-8 space-y-6">
-                    {filteredContacts.map(contact => (
-                        <li key={contact.id} className="flex space-x-2 items-center">
-                            {contact.image ? (
-                                <Image className="size-12 rounded-full" src={contact.image} alt={contact.name} width={50} height={50} />
-                            ) : (
-                                <svg
-                                    xmlns="http://www.w3.org/2000/svg"
-                                    fill="none"
-                                    viewBox="0 0 24 24"
-                                    strokeWidth="1.5"
-                                    stroke="currentColor"
-                                    className="w-12 h-12 text-gray-400"
-                                >
-                                    <path
-                                        strokeLinecap="round"
-                                        strokeLinejoin="round"
-                                        d="M17.982 18.725A7.488 7.488 0 0 0 12 15.75a7.488 7.488 0 0 0-5.982 2.975m11.963 0a9 9 0 1 0-11.963 0m11.963 0A8.966 8.966 0 0 1 12 21a8.966 8.966 0 0 1-5.982-2.275M15 9.75a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z"
-                                    />
-                                </svg>
-                            )}
-                            <h3 className="text-base font-medium text-gray-900">{contact.name}</h3>
-                        </li>
-                    ))}
-                    {filteredContacts.length === 0 && (
+                    {contacts
+                        .filter(contact =>
+                            contact.name.toLowerCase().includes(searchQuery.toLowerCase())
+                        )
+                        .map(contact => (
+                            <li key={contact.id} className="flex items-center space-x-2">
+                                <Image
+                                    className="rounded-full"
+                                    src={contact.image}
+                                    alt={contact.name}
+                                    width={50}
+                                    height={50}
+                                />
+                                <h3 className="text-base font-medium text-gray-900">{contact.name}</h3>
+                            </li>
+                        ))}
+                    {contacts.length === 0 && (
                         <p className="text-gray-500">No contacts found.</p>
                     )}
                 </ul>
