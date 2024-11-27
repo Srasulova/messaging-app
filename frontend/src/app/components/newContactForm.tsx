@@ -38,27 +38,27 @@ export default function NewContactForm({ onAddContact, onClose }: NewContactForm
 
             </button>
 
-            <h3 className="text-lg font-semibold text-gray-900 mb-4">Add New Contact</h3>
+            <h3 className="text-lg font-semibold text-green-500 mb-4">Add New Contact</h3>
             <div className="mb-4">
-                <label htmlFor="fullName" className="block text-sm font-medium text-gray-700 mb-2">Full Name</label>
+                <label htmlFor="fullName" className="block text-sm font-medium text-zinc-600 mb-2">Name</label>
                 <input
                     type="text"
                     id="fullName"
                     value={fullName}
                     onChange={(e) => setFullName(e.target.value)}
-                    placeholder="Enter full name"
-                    className="w-full p-2 border border-gray-300 rounded-md"
+                    placeholder="Enter name"
+                    className="w-full p-2 border border-gray-300 rounded-md focus:outline-green-500 focus:border-none"
                 />
             </div>
             <div className="mb-4">
-                <label htmlFor="imageUrl" className="block text-sm font-medium text-gray-700 mb-2">Image URL</label>
+                <label htmlFor="imageUrl" className="block text-sm font-medium text-zinc-600 mb-2">Image URL</label>
                 <input
                     type="text"
                     id="imageUrl"
                     value={imageUrl}
                     onChange={(e) => handleImageChange(e.target.value)}
                     placeholder="Enter image URL"
-                    className="w-full p-2 border border-gray-300 rounded-md"
+                    className="w-full p-2 border border-gray-300 rounded-md focus:outline-green-500 focus:border-none"
                 />
             </div>
             <div className="flex items-center justify-center space-x-2 mb-1">
@@ -85,7 +85,7 @@ export default function NewContactForm({ onAddContact, onClose }: NewContactForm
             </div>
             <button
                 onClick={handleAddContact}
-                className="w-full bg-cyan-400 text-white py-2 rounded-md hover:bg-cyan-700 transition"
+                className="w-full bg-green-500 text-white py-2 rounded-md hover:bg-green-700 transition"
                 disabled={!fullName} // Disable button if name is empty
             >
                 Add Contact

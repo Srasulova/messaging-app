@@ -11,7 +11,7 @@ export default function InputText({ message, handleSubmit, handleTextareaChange 
                         e.preventDefault();
                         handleSubmit()
                     }}>
-                    <div className="overflow-hidden rounded-xl shadow-lg ring-1 ring-inset ring-cyan-100 focus-within:ring-2 focus-within:ring-cyan-300">
+                    <div className="overflow-hidden rounded-xl shadow-lg ring-1 ring-inset ring-cyan-100 focus-within:ring-2 focus-within:ring-green-500">
                         <textarea rows={3} name="comment" id="comment" className="block w-full resize-none border-0 bg-transparent py-1.5 text-gray-900 placeholder:text-gray-400 focus:ring-0 sm:text-sm/6" placeholder="Add text..."
                             value={message}
                             onChange={handleTextareaChange}

@@ -13,8 +13,9 @@ export default function Contacts() {
     const [searchQuery, setSearchQuery] = useState("");
     const [contacts, setContacts] = useState([...contactsData]);
     const [showForm, setShowForm] = useState(false);
+    const [selectedContact, setSelectedContact] = useState<Contact | null>(null);
 
-    const addContact = (newContact: Omit<Contact, 'id'>) => {
+    const addContact = (newContact: Omit<Contact, "id">) => {
         setContacts([...contacts, { id: contacts.length + 1, ...newContact }]);
         setShowForm(false); // Hide form after adding contact
     };
@@ -23,9 +24,9 @@ export default function Contacts() {
         <div className="bg-white h-full overflow-auto p-4 border border-gray-200 rounded-md shadow-md">
             <div className="mx-auto max-w-7xl px-4">
                 <div className="flex justify-between items-center">
-                    <h2 className="text-xl font-semibold text-gray-900">Contacts</h2>
+                    <h2 className="text-xl font-semibold text-green-500">Contacts</h2>
                     <button
-                        className="bg-cyan-300 rounded-full active:translate-y-1"
+                        className="bg-green-500 rounded-full active:translate-y-1"
                         onClick={() => setShowForm(true)}
                     >
                         <svg
@@ -34,7 +35,7 @@ export default function Contacts() {
                             viewBox="0 0 24 24"
                             strokeWidth={2}
                             stroke="white"
-                            className="w-6 h-6 p-1"
+                            className="w-8 h-8 p-1"
                         >
                             <path
                                 strokeLinecap="round"
@@ -69,49 +70,57 @@ export default function Contacts() {
                     placeholder="Search contacts..."
                     value={searchQuery}
                     onChange={(e) => setSearchQuery(e.target.value)}
-                    className="mt-4 w-full p-2 border border-cyan-300 rounded-full"
+                    className="mt-4 w-full p-2 border border-green-500 rounded-full"
                 />
 
                 <ul role="list" className="mt-8 space-y-6">
                     {contacts
-                        .filter(contact =>
+                        .filter((contact) =>
                             contact.name.toLowerCase().includes(searchQuery.toLowerCase())
                         )
-                        .map(contact => (
-                            <li key={contact.id} className="flex items-center space-x-2">
-                                {contact.image ? (
-                                    <Image
-                                        className="rounded-full"
-                                        src={contact.image}
-                                        alt={contact.name}
-                                        width={50}
-                                        height={50}
-                                    />
-                                ) : (
-                                    <svg
-                                        xmlns="http://www.w3.org/2000/svg"
-                                        fill="none"
-                                        viewBox="0 0 24 24"
-                                        strokeWidth="1"
-                                        stroke="currentColor"
-                                        className="w-16 h-16 text-gray-400 -ml-2"
-                                    >
-                                        <path
-                                            strokeLinecap="round"
-                                            strokeLinejoin="round"
-                                            d="M17.982 18.725A7.488 7.488 0 0 0 12 15.75a7.488 7.488 0 0 0-5.982 2.975m11.963 0a9 9 0 1 0-11.963 0m11.963 0A8.966 8.966 0 0 1 12 21a8.966 8.966 0 0 1-5.982-2.275M15 9.75a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z"
+                        .map((contact) => (
+                            <li key={contact.id} className="flex">
+                                <button
+                                    className={`flex items-center space-x-2 w-full p-1 rounded-full ${selectedContact?.id === contact.id
+                                        ? "bg-green-100 border border-green-500"
+                                        : "bg-white hover:bg-green-100"
+                                        }`}
+                                    onClick={() => setSelectedContact(contact)}
+                                >
+                                    {contact.image ? (
+                                        <Image
+                                            className="rounded-full border-2 border-green-500"
+                                            src={contact.image}
+                                            alt={contact.name}
+                                            width={50}
+                                            height={50}
                                         />
-                                    </svg>
-
-                                )}
-                                <h3 className="text-base font-medium text-gray-900">{contact.name}</h3>
+                                    ) : (
+                                        <svg
+                                            xmlns="http://www.w3.org/2000/svg"
+                                            fill="none"
+                                            viewBox="0 0 24 24"
+                                            strokeWidth="1"
+                                            stroke="#22c55e"
+                                            className="w-16 h-16 text-gray-400 -ml-2 -my-2"
+                                        >
+                                            <path
+                                                strokeLinecap="round"
+                                                strokeLinejoin="round"
+                                                d="M17.982 18.725A7.488 7.488 0 0 0 12 15.75a7.488 7.488 0 0 0-5.982 2.975m11.963 0a9 9 0 1 0-11.963 0m11.963 0A8.966 8.966 0 0 1 12 21a8.966 8.966 0 0 1-5.982-2.275M15 9.75a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z"
+                                            />
+                                        </svg>
+                                    )}
+                                    <h3 className="text-base font-medium text-zinc-600">
+                                        {contact.name}
+                                    </h3>
+                                </button>
                             </li>
                         ))}
                     {contacts.length === 0 && (
-                        <p className="text-gray-500">No contacts found.</p>
+                        <p className="text-zinc-600">No contacts found.</p>
                     )}
                 </ul>
-
             </div>
         </div>
     );

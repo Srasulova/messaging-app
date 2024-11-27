@@ -9,7 +9,7 @@ export default function Conversation({ messages, type }: ConversationProps) {
                     className={`flex mb-2 ${msg.sender === type ? "justify-end" : "justify-start"}`}
                 >
                     <p
-                        className={`py-2 px-3 max-w-[70%] rounded-lg text-gray-800
+                        className={`py-2 px-3 max-w-[70%] rounded-lg text-zinc-700
               ${msg.sender === type ? "bg-green-100" : "bg-yellow-50"}
             `}
                     >
