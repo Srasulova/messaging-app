@@ -1,7 +1,7 @@
 import { useState } from "react";
 import Image from "next/image";
 import NewContactForm from "./newContactForm";
-import { Contact } from "../utils/types";
+import { Contact, ContactsProps } from "../utils/types";
 
 const contactsData: Contact[] = [
     { id: 1, name: "Michael Foster", image: "https://images.unsplash.com/photo-1519244703995-f4e0f30006d5?ixlib=rb-=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=8&w=1024&h=1024&q=80" },
@@ -9,11 +9,11 @@ const contactsData: Contact[] = [
     // More contacts...
 ];
 
-export default function Contacts() {
+export default function Contacts({ onSelectContact }: ContactsProps) {
     const [searchQuery, setSearchQuery] = useState("");
     const [contacts, setContacts] = useState([...contactsData]);
     const [showForm, setShowForm] = useState(false);
-    const [selectedContact, setSelectedContact] = useState<Contact | null>(null);
+
 
     const addContact = (newContact: Omit<Contact, "id">) => {
         setContacts([...contacts, { id: contacts.length + 1, ...newContact }]);
@@ -85,7 +85,7 @@ export default function Contacts() {
                                         ? "bg-green-100 border border-green-500"
                                         : "bg-white hover:bg-green-100"
                                         }`}
-                                    onClick={() => setSelectedContact(contact)}
+                                    onClick={() => onSelectContact(contact)}
                                 >
                                     {contact.image ? (
                                         <Image

@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { translateText } from "./utils/translate";
 import ChatWindow from "./components/chatWindow";
-import { UserType, Message } from "./utils/types";
+import { UserType, Message, Contact } from "./utils/types";
 import Contacts from "./components/contacts";
 
 export default function Home() {
@@ -14,6 +14,15 @@ export default function Home() {
   const [recipientLanguage, setRecipientLanguage] = useState<string>("en");
   const [recipientMessage, setRecipientMessage] = useState<string>("");
   const [recipientConversations, setRecipientConversations] = useState<Message[]>([]);
+
+
+  const [selectedContact, setSelectedContact] = useState<Contact | null>(null);
+
+
+  // Handle contact selection
+  const handleSelectContact = (contact: Contact) => {
+    setSelectedContact(contact); // Update the selected contact
+  };
 
   // Handle message submission, translation, and conversation updates
   const handleSubmitMessage = async (message: string, type: UserType) => {
@@ -38,10 +47,11 @@ export default function Home() {
     }
   };
 
+
   return (<>
     <div className="flex h-svh">
       <div className="w-1/5 max-w-xs p-4 min-w-fit">
-        <Contacts />
+        <Contacts onSelectContact={handleSelectContact} />
       </div>
 
       <div className="w-full md:flex-row md:space-x-8 md:space-y-0 p-4 flex flex-col space-y-8">
@@ -53,6 +63,7 @@ export default function Home() {
           setMessage={setSenderMessage}
           conversations={senderConversations}
           onSubmitMessage={(message) => handleSubmitMessage(message, "sender")}
+          selectedContact="Me" // Static for sender chat
         />
         <ChatWindow
           type="recipient"
@@ -62,6 +73,7 @@ export default function Home() {
           setMessage={setRecipientMessage}
           conversations={recipientConversations}
           onSubmitMessage={(message) => handleSubmitMessage(message, "recipient")}
+          selectedContact={selectedContact?.name || "Recipient"} // Dynamic for recipient chat
         />
       </div>
     </div>

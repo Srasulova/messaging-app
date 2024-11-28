@@ -12,6 +12,7 @@ export default function ChatWindow({
     setMessage,
     conversations,
     onSubmitMessage,
+    selectedContact
 }: ChatWindowProps) {
 
     const handleLanguageChange = (newLanguage: string) => setLanguage(newLanguage);
@@ -31,7 +32,7 @@ export default function ChatWindow({
 
             {/* Chat Window Content */}
             <div className="relative z-10 flex flex-col flex-grow space-y-4">
-                <h2 className="text-lg text-zinc-600 font-semibold">{type === "sender" ? "Sender" : "Recipient"} Chat</h2>
+                <h2 className="text-lg text-zinc-600 font-semibold">{type === "sender" ? "My Chat" : `${selectedContact || "Recipient"} Chat`}</h2>
 
                 <LanguageSelection
                     selectedLanguage={language}

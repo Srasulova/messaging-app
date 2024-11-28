@@ -21,6 +21,7 @@ export type ChatWindowProps = {
   setMessage: (message: string) => void;
   conversations: Message[];
   onSubmitMessage: (message: string) => void;
+  selectedContact: string | null;
 };
 
 export type InputTextProps = {
@@ -42,4 +43,8 @@ export type LanguageSelectionProps = {
 export type NewContactFormProps = {
   onAddContact: (contact: { name: string; image: string }) => void;
   onClose: () => void;
+};
+
+export type ContactsProps = {
+  onSelectContact: (contact: Contact) => void;
 };
