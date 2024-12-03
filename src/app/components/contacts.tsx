@@ -1,5 +1,5 @@
 import { useState } from "react";
-import Image from "next/image";
+// import Image from "next/image";
 import NewContactForm from "./newContactForm";
 import { Contact, ContactsProps } from "../utils/types";
 
@@ -88,7 +88,7 @@ export default function Contacts({ onSelectContact, selectedContact }: ContactsP
                                     onClick={() => onSelectContact(contact)}
                                 >
                                     {contact.image ? (
-                                        <Image
+                                        <img
                                             className="rounded-full border-2 border-green-500"
                                             src={contact.image}
                                             alt={contact.name}
