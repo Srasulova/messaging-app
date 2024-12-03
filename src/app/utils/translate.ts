@@ -20,8 +20,8 @@ export async function translateText(
     throw new Error("Translation API request failed");
   }
 
-  const responseBody = await response.json(); // Read response as text first
-  console.log("API Response:", responseBody); // Log the raw response for debugging
+  const responseBody = await response.json();
+  console.log("API Response:", responseBody);
 
   if (!responseBody) {
     console.error("Empty response body from the translation API");
