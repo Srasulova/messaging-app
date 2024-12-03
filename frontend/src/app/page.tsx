@@ -22,6 +22,16 @@ export default function Home() {
   // Handle contact selection
   const handleSelectContact = (contact: Contact) => {
     setSelectedContact(contact); // Update the selected contact
+
+    // Clear conversations and reset messages for the new contact
+    setSenderConversations([]);
+    setRecipientConversations([]);
+    setSenderMessage("");
+    setRecipientMessage("");
+
+    // Reset languages to default ("en")
+    setSenderLanguage("en");
+    setRecipientLanguage("en");
   };
 
   // Handle message submission, translation, and conversation updates
@@ -51,7 +61,7 @@ export default function Home() {
   return (<>
     <div className="flex h-svh">
       <div className="w-1/5 max-w-xs p-4 min-w-fit">
-        <Contacts onSelectContact={handleSelectContact} />
+        <Contacts onSelectContact={handleSelectContact} selectedContact={selectedContact} />
       </div>
 
       <div className="w-full md:flex-row md:space-x-8 md:space-y-0 p-4 flex flex-col space-y-8">

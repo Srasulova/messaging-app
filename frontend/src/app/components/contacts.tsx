@@ -9,7 +9,7 @@ const contactsData: Contact[] = [
     // More contacts...
 ];
 
-export default function Contacts({ onSelectContact }: ContactsProps) {
+export default function Contacts({ onSelectContact, selectedContact }: ContactsProps) {
     const [searchQuery, setSearchQuery] = useState("");
     const [contacts, setContacts] = useState([...contactsData]);
     const [showForm, setShowForm] = useState(false);
