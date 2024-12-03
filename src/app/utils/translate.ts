@@ -23,17 +23,18 @@ export async function translateText(
   const responseBody = await response.json();
   console.log("API Response:", responseBody);
 
-  if (!responseBody) {
-    console.error("Empty response body from the translation API");
-    throw new Error("Empty response body from the translation API");
+  if (!responseBody || !responseBody.data || !responseBody.data.translations) {
+    console.error("Empty or malformed response body from the translation API");
+    throw new Error(
+      "Empty or malformed response body from the translation API"
+    );
   }
 
   try {
-    const data = JSON.parse(responseBody); // Parse the response to JSON
-    return decodeHtmlEntities(data.data.translations[0].translatedText);
+    return decodeHtmlEntities(responseBody.data.translations[0].translatedText);
   } catch (error) {
-    console.error("Error parsing JSON:", error, responseBody); // Log response body and error
-    throw new Error("Failed to parse response JSON");
+    console.error("Error parsing response data:", error, responseBody); // Log response body and error
+    throw new Error("Failed to parse response data");
   }
 }
 
