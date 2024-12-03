@@ -47,5 +47,5 @@ export type NewContactFormProps = {
 
 export type ContactsProps = {
   onSelectContact: (contact: Contact) => void;
-  selectedContact: Contact;
+  selectedContact: Contact | null;
 };
