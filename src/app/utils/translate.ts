@@ -1,5 +1,3 @@
-// utils/translationUtils.ts
-
 export async function translateText(
   text: string,
   targetLanguage: string
@@ -7,29 +5,34 @@ export async function translateText(
   const apiKey = process.env.NEXT_PUBLIC_GOOGLE_TRANSLATE_API_KEY;
   const url = process.env.NEXT_PUBLIC_GOOGLE_TRANSLATE_URL;
 
+  console.log("API Key:", apiKey); // Log API Key for debugging (ensure it's correct)
+  console.log("API URL:", url); // Log API URL for debugging (ensure it's correct)
+
   const response = await fetch(`${url}?key=${apiKey}`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ q: text, target: targetLanguage }),
   });
 
-  if (!response.ok) throw new Error("Translation API request failed");
+  if (!response.ok) {
+    const errorText = await response.text();
+    console.error("API Error:", errorText); // Log any API error message
+    throw new Error("Translation API request failed");
+  }
 
-  // const responseBody = await response.json(); // Read response as text first
-  // console.log("API Response:", responseBody); // Log the response body for debugging
-  // console.log("API Key:", apiKey);
-  // console.log("API URL:", url);
+  const responseBody = await response.text(); // Read response as text first
+  console.log("API Response:", responseBody); // Log the raw response for debugging
 
-  // if (!responseBody) {
-  //   throw new Error("Empty response body from the translation API");
-  // }
+  if (!responseBody) {
+    console.error("Empty response body from the translation API");
+    throw new Error("Empty response body from the translation API");
+  }
 
   try {
-    // const data = JSON.parse(responseBody); // Parse the response to JSON
-    const data = await response.json();
+    const data = JSON.parse(responseBody); // Parse the response to JSON
     return decodeHtmlEntities(data.data.translations[0].translatedText);
   } catch (error) {
-    console.error("Error parsing JSON:", error);
+    console.error("Error parsing JSON:", error, responseBody); // Log response body and error
     throw new Error("Failed to parse response JSON");
   }
 }
