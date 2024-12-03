@@ -15,8 +15,16 @@ export async function translateText(
 
   if (!response.ok) throw new Error("Translation API request failed");
 
-  const data = await response.json();
-  return decodeHtmlEntities(data.data.translations[0].translatedText);
+  const responseBody = await response.text(); // Read response as text first
+  console.log("API Response:", responseBody); // Log the response body for debugging
+
+  try {
+    const data = JSON.parse(responseBody); // Parse the response to JSON
+    return decodeHtmlEntities(data.data.translations[0].translatedText);
+  } catch (error) {
+    console.error("Error parsing JSON:", error);
+    throw new Error("Failed to parse response JSON");
+  }
 }
 
 export function decodeHtmlEntities(text: string): string {
