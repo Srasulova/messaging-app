@@ -21,7 +21,7 @@ export default function Contacts({ onSelectContact, selectedContact }: ContactsP
     };
 
     return (
-        <div className="bg-white h-full overflow-auto p-4 border border-gray-200 rounded-md shadow-md">
+        <div className="bg-neutral-50 h-full overflow-auto p-4 border border-gray-200 rounded-md shadow-md">
             <div className="mx-auto max-w-7xl px-4">
                 <div className="flex justify-between items-center">
                     <h2 className="text-xl font-semibold text-green-500">Contacts</h2>

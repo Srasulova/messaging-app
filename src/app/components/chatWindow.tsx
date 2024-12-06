@@ -25,10 +25,10 @@ export default function ChatWindow({
     };
 
     return (
-        <div className="relative flex flex-col w-full h-full space-y-4 p-4 border border-gray-200 rounded-md shadow-md">
+        <div className="overflow-y-auto flex flex-col w-full h-full min-h-full space-y-4 p-4 border border-gray-200 rounded-md shadow-md bg-neutral-50">
             {/* Patterned Background */}
-            <div className="absolute inset-0 pattern-boxes pattern-green-100 pattern-bg-white 
-  pattern-size-2 pattern-opacity-40 z-0 rounded-md"></div>
+            {/* <div className="absolute pattern-boxes inset-0 pattern-green-100 pattern-bg-white 
+  pattern-size-2 pattern-opacity-40 rounded-md"></div> */}
 
             {/* Chat Window Content */}
             <div className="relative z-10 flex flex-col flex-grow space-y-4">
@@ -46,6 +46,7 @@ export default function ChatWindow({
                     handleTextareaChange={handleMessageChange}
                     handleSubmit={handleSubmit}
                 />
+
             </div>
         </div>
     );

@@ -64,7 +64,7 @@ export default function Home() {
         <Contacts onSelectContact={handleSelectContact} selectedContact={selectedContact} />
       </div>
 
-      <div className="w-full md:flex-row md:space-x-8 md:space-y-0 p-4 flex flex-col space-y-8">
+      <div className="w-full min-h-screen md:flex-row md:space-x-8 md:space-y-0 p-4 flex flex-col space-y-8">
         <ChatWindow
           type="sender"
           language={senderLanguage}

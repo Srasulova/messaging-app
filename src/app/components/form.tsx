@@ -4,7 +4,7 @@ import { InputTextProps } from "../utils/types";
 
 export default function InputText({ message, handleSubmit, handleTextareaChange }: InputTextProps) {
     return (<>
-        <div className="w-full bg-yellow-50 place-self-end ">
+        <div className="w-full bg-yellow-50 place-self-end">
             <div className="min-w-0">
                 <form action="#" className="relative"
                     onSubmit={(e) => {
